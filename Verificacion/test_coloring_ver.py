@@ -13,10 +13,10 @@ test_cases = [
         "expected": False
     },
     {
-        "name": "2. Exceso de colores en grafo cuadrado (color de vértice mayor o igual a n)",
-        "V": {0: 0, 1: 1, 2: 2, 3: 1},
-        "E": [(0, 1), (1, 2), (2, 3), (3, 0)],
-        "n": 2,
+        "name": "2. Exceso de colores (color de vértice mayor o igual a n)",
+        "V": {0: 0, 1: 1, 2: 3},
+        "E": [(0, 1), (1, 2)],
+        "n": 3,
         "expected": False
     },
     {
