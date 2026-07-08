@@ -1,3 +1,5 @@
+import pytest
+
 def colorind_verify(V, E, n):
     for v in V:
         if V[v] >= n:
@@ -7,17 +9,6 @@ def colorind_verify(V, E, n):
             return False
     return True
 
-
-    ### PRUEBAS UNITARUAS 
-import sys
-import os
-import pytest
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from Verificacion.coloring_ver import colorind_verify
-
-# Lista de casos de prueba
 test_cases = [
     {
         "name": "1. Coloreado incorrecto (vértices adyacentes mismo color)",
