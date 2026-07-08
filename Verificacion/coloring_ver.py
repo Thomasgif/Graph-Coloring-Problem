@@ -9,13 +9,7 @@ def colorind_verify(V, E, n):
 
 
     ### PRUEBAS UNITARUAS 
-import sys
-import os
 import pytest
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from Verificacion.coloring_ver import colorind_verify
 
 # Lista de casos de prueba
 test_cases = [
