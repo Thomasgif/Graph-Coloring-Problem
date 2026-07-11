@@ -36,7 +36,7 @@ def encontrar_k(G):
 
     backtracking_coloring(G, V, 0, colors, variables_globales)
     
-    return variables_globales['mejor_colores'], variables_globales['mejor_num_colores']
+    return variables_globales['mejor_num_colores'], variables_globales['mejor_colores']
 
     
     

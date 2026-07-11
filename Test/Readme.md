@@ -2,4 +2,4 @@ Todos los datos de entrada a las funciones tendrán las siguientes restricciones
 
 El dato de entrada para las funciones deben ser un diccionario con la siguiente estructura: {vertex: [neighbors]}.
 
-los datos de salida seran el numero de colores k que nos ha determinado el algoritmo y un diccionario con la asignación de colores a cada vértice.
+los datos de salida seran el numero de colores k que nos ha determinado el algoritmo y un diccionario con la asignación de colores a cada vértice. k, {vertex: color}

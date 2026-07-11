@@ -14,7 +14,7 @@ def brute_force_coloring(G):
         for colors in itertools.product(range(1, k + 1), repeat=n):
             mapping = dict(zip(V, colors))
             if is_safe_all(G, mapping):
-                return mapping, k
+                return k, mapping
 
 
     
