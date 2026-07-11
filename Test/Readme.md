@@ -1,0 +1,3 @@
+Todos los datos de entrada a las funciones tendrán las siguientes restricciones sera un grafo no dirigido, no multigrafico y sin lazos, además como forma de testeo no se tendrán en cuenta grafos sin aristasy grafos completos, ya que los 2 anteriores son casos triviales donde su respuesta a la k-coloracion es k=1 y k=V respectivamente.
+
+El dato de entrada para las funciones deben ser un diccionario con la siguiente estructura: {vertex: [neighbors]}.
