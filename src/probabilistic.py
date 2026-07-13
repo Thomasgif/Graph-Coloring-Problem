@@ -6,7 +6,7 @@ def probabilistic_coloring(G, seed=None):
 
     V = list(G.keys())
     random.shuffle(V)
-    colors = dict.fromkeys(V, 0) 
+    colors = {node: 0 for node in G} 
 
     for vertex in V:
         used_colors = set()

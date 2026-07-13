@@ -27,11 +27,11 @@ def backtracking_coloring(G, V, index, colors, variables_globales):
         if is_safe(vertex, color, G, colors):
             colors[vertex] = color
             backtracking_coloring(G, V, index + 1, colors, variables_globales)
-            colors[vertex] = None
+            colors[vertex] = 0
 
 def encontrar_k(G):
     V = list(G.keys())
-    colors = dict.fromkeys(V, None)
+    colors = {vertex: 0 for vertex in V}
     variables_globales = {'mejor_num_colores': len(V), 'mejor_colores': None}
 
     backtracking_coloring(G, V, 0, colors, variables_globales)

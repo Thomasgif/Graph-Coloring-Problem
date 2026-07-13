@@ -16,5 +16,4 @@ def brute_force_coloring(G):
             if is_safe_all(G, mapping):
                 return k, mapping
 
-
     
