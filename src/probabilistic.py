@@ -1,17 +1,18 @@
 import random
 
-def probabilistic_coloring(G):
+def probabilistic_coloring(G, seed=None):
+    if seed is not None:
+        random.seed(seed)
 
     V = list(G.keys())
     random.shuffle(V)
-    colors = dict.fromkeys(V, None) 
-    
+    colors = dict.fromkeys(V, 0) 
 
     for vertex in V:
         used_colors = set()
 
         for child in G[vertex]:
-            if colors[child] != None:
+            if colors[child] != 0:
                 used_colors.add(colors[child])
         
         current_color = 0

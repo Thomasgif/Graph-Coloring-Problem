@@ -8,7 +8,7 @@ def dsatur_coloring(G):
         best_node = max(v, key=lambda node: (saturation[node], degrees[node]))
         neighbors_colors = {colors[neighbors] for neighbors in G[best_node] if colors[neighbors] != 0}
         
-        color = 0
+        color = 1
         while color in neighbors_colors:
             color += 1
         colors[best_node] = color

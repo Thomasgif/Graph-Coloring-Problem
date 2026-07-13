@@ -12,7 +12,7 @@ def backtracking_coloring(G, V, index, colors, variables_globales):
         
         if colores_usados < variables_globales['mejor_num_colores']:
             variables_globales['mejor_num_colores'] = colores_usados
-            variables_globales['mejor_colores'] = colors
+            variables_globales['mejor_colores'] = colors.copy()
         return
 
     vertex = V[index]
