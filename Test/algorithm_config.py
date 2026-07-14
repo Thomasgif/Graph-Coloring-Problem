@@ -1,11 +1,23 @@
 from __future__ import annotations
-
 from dataclasses import dataclass
+import multiprocessing
+import time
 from typing import Any, Callable, Dict, List, Optional
 
 Graph = Dict[Any, List[Any]]
 Algorithm = Callable[..., tuple]
 
+EXECUTION_RESULTS: List[Dict[str, Any]] = []
+
+def _multiprocessing_worker(func, graph, seed_keyword, seed, queue):
+    try:
+        kwargs = {}
+        if seed_keyword is not None and seed is not None:
+            kwargs[seed_keyword] = seed
+        result = func(graph, **kwargs)
+        queue.put((True, result))
+    except Exception as e:
+        queue.put((False, str(e)))
 
 @dataclass(frozen=True)
 class AlgorithmSpec:
@@ -30,13 +42,98 @@ class AlgorithmSpec:
     repetitions: int = 1
     seed_keyword: Optional[str] = None
 
-    def run(self, graph: Graph, seed: Optional[int] = None) -> tuple:
-        kwargs = {}
+    def run(
+        self,
+        graph: Graph,
+        seed: Optional[int] = None,
+        case_name: str = "Unknown",
+        repetition: int = 0
+    ) -> tuple:
+        from validators import edge_count
+        num_vertices = len(graph)
+        num_edges = edge_count(graph)
 
-        if self.seed_keyword is not None and seed is not None:
-            kwargs[self.seed_keyword] = seed
-
-        return self.function(graph, **kwargs)
+        queue = multiprocessing.Queue()
+        process = multiprocessing.Process(
+            target=_multiprocessing_worker,
+            args=(self.function, graph, self.seed_keyword, seed, queue)
+        )
+        
+        start_time = time.perf_counter()
+        process.start()
+        
+        timeout = 5.0
+        process.join(timeout=timeout)
+        elapsed_time = time.perf_counter() - start_time
+        
+        if process.is_alive():
+            process.terminate()
+            process.join()
+            
+            result_entry = {
+                "algorithm": self.name,
+                "case": case_name,
+                "num_vertices": num_vertices,
+                "num_edges": num_edges,
+                "seed": seed,
+                "repetition": repetition,
+                "time_taken": elapsed_time,
+                "colors_used": None,
+                "status": "Timeout"
+            }
+            EXECUTION_RESULTS.append(result_entry)
+            raise TimeoutError(f"Algorithm {self.name} timed out after {elapsed_time:.4f} seconds on case {case_name}")
+            
+        if not queue.empty():
+            success, value = queue.get()
+            queue.close()
+            queue.join_thread()
+            if success:
+                # value is (k, coloring)
+                k = value[0]
+                result_entry = {
+                    "algorithm": self.name,
+                    "case": case_name,
+                    "num_vertices": num_vertices,
+                    "num_edges": num_edges,
+                    "seed": seed,
+                    "repetition": repetition,
+                    "time_taken": elapsed_time,
+                    "colors_used": k,
+                    "status": "Completed"
+                }
+                EXECUTION_RESULTS.append(result_entry)
+                return value
+            else:
+                result_entry = {
+                    "algorithm": self.name,
+                    "case": case_name,
+                    "num_vertices": num_vertices,
+                    "num_edges": num_edges,
+                    "seed": seed,
+                    "repetition": repetition,
+                    "time_taken": elapsed_time,
+                    "colors_used": None,
+                    "status": f"Error: {value}"
+                }
+                EXECUTION_RESULTS.append(result_entry)
+                raise Exception(f"Algorithm {self.name} failed with error: {value}")
+        else:
+            queue.close()
+            queue.join_thread()
+            result_entry = {
+                "algorithm": self.name,
+                "case": case_name,
+                "num_vertices": num_vertices,
+                "num_edges": num_edges,
+                "seed": seed,
+                "repetition": repetition,
+                "time_taken": elapsed_time,
+                "colors_used": None,
+                "status": "No Output"
+            }
+            EXECUTION_RESULTS.append(result_entry)
+            raise Exception(f"Algorithm {self.name} exited without putting result to queue.")
 
 
 # -----------------------------------------------------------------

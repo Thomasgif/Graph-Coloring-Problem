@@ -51,6 +51,8 @@ def test_algorithm_on_manual_graph(
         result = algorithm.run(
             case.graph,
             seed=case.expected_k * 10_000 + execution,
+            case_name=case.name,
+            repetition=execution,
         )
 
         k, coloring = validate_coloring_output(case.graph, result)

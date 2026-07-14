@@ -60,8 +60,12 @@ def test_algorithm_on_random_graph(
 
     for execution in range(algorithm.repetitions):
         seed = case.seed * 1_000 + execution
-
-        result = algorithm.run(case.graph, seed=seed)
+        result = algorithm.run(
+            case.graph,
+            seed=seed,
+            case_name=case.name,
+            repetition=execution,
+        )
         k, _ = validate_coloring_output(case.graph, result)
         obtained_values.append(k)
 
